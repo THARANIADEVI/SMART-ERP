@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from './context/AuthContext';
 
@@ -15,12 +15,13 @@ export default function Login() {
   const [load, setLoad] = useState(false);
 
   // Redirect if already logged in
-  if (!isLoading && token) {
-    router.push('/dashboard');
-    return null;
-  }
+  useEffect(() => {
+    if (!isLoading && token) {
+      router.push('/dashboard');
+    }
+  }, [isLoading, token, router]);
 
-  if (isLoading) {
+  if (isLoading || token) {
     return (
       <div className="flex justify-center items-center h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="text-center animate-scaleIn">
