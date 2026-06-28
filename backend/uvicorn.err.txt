@@ -1,12 +1,13 @@
-INFO:     Will watch for changes in these directories: ['E:\\Smart ERP\\backend']
-E:\Smart ERP\backend\.venv\Lib\site-packages\pydantic\_internal\_config.py:386: UserWarning: Valid config keys have changed in V2:
-* 'orm_mode' has been renamed to 'from_attributes'
-  warnings.warn(message, UserWarning)
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [1240] using WatchFiles
-E:\Smart ERP\backend\.venv\Lib\site-packages\pydantic\_internal\_config.py:386: UserWarning: Valid config keys have changed in V2:
-* 'orm_mode' has been renamed to 'from_attributes'
-  warnings.warn(message, UserWarning)
-INFO:     Started server process [13696]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 189, in _run_module_as_main
+  File "<frozen runpy>", line 148, in _get_module_details
+  File "<frozen runpy>", line 112, in _get_module_details
+  File "E:\Smart ERP\backend\.venv\Lib\site-packages\uvicorn\__init__.py", line 1, in <module>
+    from uvicorn.config import Config
+  File "E:\Smart ERP\backend\.venv\Lib\site-packages\uvicorn\config.py", line 3, in <module>
+    import asyncio
+  File "C:\Users\thara\AppData\Local\Python\pythoncore-3.14-64\Lib\asyncio\__init__.py", line 45, in <module>
+    from .windows_events import *
+  File "C:\Users\thara\AppData\Local\Python\pythoncore-3.14-64\Lib\asyncio\windows_events.py", line 8, in <module>
+    import _overlapped
+OSError: [WinError 10106] The requested service provider could not be loaded or initialized

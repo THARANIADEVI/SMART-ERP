@@ -1,11 +1,16 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
+  const router = useRouter();
+  const { clearToken } = useAuth();
+
   const logout = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/';
+    clearToken();
+    router.push('/');
   };
 
   return (
@@ -21,32 +26,32 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <Link href="/ledger/customer" className="bg-white p-6 rounded shadow hover:shadow-lg">
+        <Link href="/ledger/customer" className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer">
           <h2 className="font-bold text-lg">Customer Ledger</h2>
           <p className="text-gray-600 text-sm">Manage customers</p>
         </Link>
 
-        <Link href="/ledger/supplier" className="bg-white p-6 rounded shadow hover:shadow-lg">
+        <Link href="/ledger/supplier" className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer">
           <h2 className="font-bold text-lg">Supplier Ledger</h2>
           <p className="text-gray-600 text-sm">Manage suppliers</p>
         </Link>
 
-        <Link href="/stock" className="bg-white p-6 rounded shadow hover:shadow-lg">
+        <Link href="/stock" className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer">
           <h2 className="font-bold text-lg">Stock Items</h2>
           <p className="text-gray-600 text-sm">Manage inventory</p>
         </Link>
 
-        <Link href="/voucher/sales" className="bg-white p-6 rounded shadow hover:shadow-lg">
+        <Link href="/voucher/sales" className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer">
           <h2 className="font-bold text-lg">Sales Voucher</h2>
           <p className="text-gray-600 text-sm">Create sales bills</p>
         </Link>
 
-        <Link href="/voucher/purchase" className="bg-white p-6 rounded shadow hover:shadow-lg">
+        <Link href="/voucher/purchase" className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer">
           <h2 className="font-bold text-lg">Purchase Voucher</h2>
           <p className="text-gray-600 text-sm">Create purchase orders</p>
         </Link>
 
-        <Link href="/reports" className="bg-white p-6 rounded shadow hover:shadow-lg">
+        <Link href="/reports" className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer">
           <h2 className="font-bold text-lg">Reports</h2>
           <p className="text-gray-600 text-sm">View reports</p>
         </Link>

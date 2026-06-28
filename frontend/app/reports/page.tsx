@@ -3,6 +3,10 @@
 import Link from 'next/link';
 
 export default function Reports() {
+  const downloadReport = (type: string) => {
+    alert(`Downloading ${type} report...`);
+  };
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-6">
@@ -11,28 +15,48 @@ export default function Reports() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white p-6 rounded shadow">
+        <div className="bg-white p-6 rounded shadow hover:shadow-lg">
           <h2 className="font-bold text-lg mb-2">Balance Sheet</h2>
           <p className="text-gray-600 text-sm mb-4">Financial position</p>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">View</button>
+          <button 
+            onClick={() => downloadReport('Balance Sheet')}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            View
+          </button>
         </div>
 
-        <div className="bg-white p-6 rounded shadow">
+        <div className="bg-white p-6 rounded shadow hover:shadow-lg">
           <h2 className="font-bold text-lg mb-2">Profit & Loss</h2>
           <p className="text-gray-600 text-sm mb-4">P&L summary</p>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">View</button>
+          <button 
+            onClick={() => downloadReport('P&L')}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            View
+          </button>
         </div>
 
-        <div className="bg-white p-6 rounded shadow">
+        <div className="bg-white p-6 rounded shadow hover:shadow-lg">
           <h2 className="font-bold text-lg mb-2">Stock Summary</h2>
           <p className="text-gray-600 text-sm mb-4">Inventory status</p>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">View</button>
+          <button 
+            onClick={() => downloadReport('Stock Summary')}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            View
+          </button>
         </div>
 
-        <div className="bg-white p-6 rounded shadow">
+        <div className="bg-white p-6 rounded shadow hover:shadow-lg">
           <h2 className="font-bold text-lg mb-2">Sales Summary</h2>
           <p className="text-gray-600 text-sm mb-4">Sales data</p>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">View</button>
+          <button 
+            onClick={() => downloadReport('Sales Summary')}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            View
+          </button>
         </div>
       </div>
     </div>
