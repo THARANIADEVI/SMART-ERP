@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from './context/AuthContext';
 
@@ -15,8 +15,13 @@ export default function Login() {
   const [load, setLoad] = useState(false);
 
   // Redirect if already logged in
+  useEffect(() => {
+    if (!isLoading && token) {
+      router.push('/dashboard');
+    }
+  }, [isLoading, token, router]);
+
   if (!isLoading && token) {
-    router.push('/dashboard');
     return null;
   }
 

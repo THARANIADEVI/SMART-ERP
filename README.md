@@ -1,11 +1,30 @@
-# 🏢 SMART-ERP
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=SMART-ERP&fontSize=60&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Billing%20%C2%B7%20Inventory%20%C2%B7%20Accounting%20%E2%80%94%20Tally-inspired,%20built%20in%20Python%20%2B%20Next.js&descAlignY=58&descSize=18" />
+</p>
+
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1200&color=6366F1&center=true&vCenter=true&width=600&lines=Ledger+%C2%B7+Stock+%C2%B7+Vouchers+%C2%B7+Reports;JWT+Auth+%2B+FastAPI+%2B+Next.js+16;Keyboard-first%2C+Tally-style+workflow" alt="Typing SVG" />
+</p>
 
 A modern, full-stack Enterprise Resource Planning system designed for small to medium businesses. Built with cutting-edge web technologies, SMART-ERP provides a comprehensive solution for managing inventory, customers, suppliers, and financial transactions.
 
-![GitHub last commit](https://img.shields.io/github/last-commit/THARANIADEVI/SMART-ERP)
-![GitHub license](https://img.shields.io/github/license/THARANIADEVI/SMART-ERP)
-![Node.js](https://img.shields.io/badge/Node.js-16+-green)
-![Python](https://img.shields.io/badge/Python-3.8+-blue)
+<p align="center">
+  <img src="https://img.shields.io/github/last-commit/THARANIADEVI/SMART-ERP" />
+  <img src="https://img.shields.io/github/license/THARANIADEVI/SMART-ERP" />
+  <img src="https://img.shields.io/badge/Node.js-16+-green" />
+  <img src="https://img.shields.io/badge/Python-3.8+-blue" />
+  <img src="https://img.shields.io/badge/status-active--development-orange" />
+</p>
+
+---
+
+## 🎬 Demo
+
+<p align="center">
+  <img src="docs/demo.gif" alt="SMART-ERP walkthrough: register, dashboard, stock, ledger, vouchers, reports" width="640" />
+</p>
+
+<p align="center"><sub>Register &rarr; Dashboard &rarr; Stock Items &rarr; Customer Ledger &rarr; Sales Voucher &rarr; Reports</sub></p>
 
 ---
 
@@ -360,5 +379,5 @@ For support, email support@smarterp.com or create an issue on GitHub.
 
 ---
 
-**Last Updated**: June 28, 2026
+**Last Updated**: July 1, 2026
 **Status**: Active Development 🚀
