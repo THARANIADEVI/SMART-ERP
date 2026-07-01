@@ -17,6 +17,7 @@ export default function Ledger() {
   const { token } = useAuth();
   const [items, setItems] = useState<LedgerItem[]>([]);
   const [name, setName] = useState('');
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -39,7 +40,12 @@ export default function Ledger() {
     }
   };
 
-  const add = async () => {
+  const resetForm = () => {
+    setName('');
+    setEditingId(null);
+  };
+
+  const save = async () => {
     if (!name.trim()) {
       setError('Please enter a name');
       return;
@@ -48,13 +54,13 @@ export default function Ledger() {
     try {
       setLoading(true);
       setError('');
-      const newItem = await apiCall<LedgerItem>(`/ledger/${type}`, {
-        method: 'POST',
+      const savedItem = await apiCall<LedgerItem>(editingId ? `/ledger/${type}/${editingId}` : `/ledger/${type}`, {
+        method: editingId ? 'PUT' : 'POST',
         token,
         body: JSON.stringify({ name }),
       });
-      setItems([...items, newItem]);
-      setName('');
+      setItems(editingId ? items.map(item => item.id === editingId ? savedItem : item) : [...items, savedItem]);
+      resetForm();
     } catch (e) {
       setError(String(e));
     } finally {
@@ -70,6 +76,9 @@ export default function Ledger() {
         token,
       });
       setItems(items.filter(item => item.id !== id));
+      if (editingId === id) {
+        resetForm();
+      }
     } catch (e) {
       setError(String(e));
     } finally {
@@ -98,11 +107,11 @@ export default function Ledger() {
             className="flex-1 p-2 border rounded disabled:opacity-50"
           />
           <button
-            onClick={add}
+            onClick={save}
             disabled={loading}
             className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50"
           >
-            {loading ? 'Adding...' : 'Add'}
+            {loading ? 'Saving...' : editingId ? 'Update' : 'Add'}
           </button>
         </div>
       </div>
@@ -126,7 +135,15 @@ export default function Ledger() {
                     <td className="border p-3">{item.id}</td>
                     <td className="border p-3">{item.name}</td>
                     <td className="border p-3">
-                      <button className="text-blue-600 hover:underline mr-2">Edit</button>
+                      <button
+                        onClick={() => {
+                          setEditingId(item.id);
+                          setName(item.name);
+                        }}
+                        className="text-blue-600 hover:underline mr-2"
+                      >
+                        Edit
+                      </button>
                       <button 
                         onClick={() => deleteItem(item.id)}
                         className="text-red-600 hover:underline"

@@ -35,6 +35,7 @@ class StockItem(Base):
     name = Column(String, nullable=False)
     sku = Column(String, index=True)
     quantity = Column(Float, default=0.0)
+    price = Column(Float, default=0.0)
     company_id = Column(Integer, ForeignKey("companies.id"))
 
 
@@ -53,3 +54,13 @@ class VoucherEntry(Base):
     voucher_type = Column(String)
     amount = Column(Float, default=0.0)
     invoice_id = Column(Integer, ForeignKey("invoices.id"))
+
+
+class Voucher(Base):
+    __tablename__ = "vouchers"
+    id = Column(Integer, primary_key=True, index=True)
+    voucher_type = Column(String, nullable=False, index=True)
+    party = Column(String, nullable=False)
+    amount = Column(Float, default=0.0)
+    date = Column(DateTime, default=datetime.datetime.utcnow)
+    company_id = Column(Integer, ForeignKey("companies.id"))

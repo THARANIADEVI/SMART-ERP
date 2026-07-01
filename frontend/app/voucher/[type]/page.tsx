@@ -20,6 +20,7 @@ export default function Voucher() {
   const [items, setItems] = useState<VoucherItem[]>([]);
   const [party, setParty] = useState('');
   const [amt, setAmt] = useState('');
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -42,7 +43,13 @@ export default function Voucher() {
     }
   };
 
-  const add = async () => {
+  const resetForm = () => {
+    setParty('');
+    setAmt('');
+    setEditingId(null);
+  };
+
+  const save = async () => {
     if (!party.trim() || !amt.trim()) {
       setError('Please fill all fields');
       return;
@@ -51,14 +58,13 @@ export default function Voucher() {
     try {
       setLoading(true);
       setError('');
-      const newItem = await apiCall<VoucherItem>(`/voucher/${type}`, {
-        method: 'POST',
+      const savedItem = await apiCall<VoucherItem>(editingId ? `/voucher/${type}/${editingId}` : `/voucher/${type}`, {
+        method: editingId ? 'PUT' : 'POST',
         token,
         body: JSON.stringify({ party, amt: parseFloat(amt) }),
       });
-      setItems([...items, newItem]);
-      setParty('');
-      setAmt('');
+      setItems(editingId ? items.map(item => item.id === editingId ? savedItem : item) : [...items, savedItem]);
+      resetForm();
     } catch (e) {
       setError(String(e));
     } finally {
@@ -74,6 +80,9 @@ export default function Voucher() {
         token,
       });
       setItems(items.filter(item => item.id !== id));
+      if (editingId === id) {
+        resetForm();
+      }
     } catch (e) {
       setError(String(e));
     } finally {
@@ -110,11 +119,11 @@ export default function Voucher() {
             className="p-2 border rounded disabled:opacity-50" 
           />
           <button 
-            onClick={add}
+            onClick={save}
             disabled={loading}
             className="bg-green-600 text-white px-4 rounded hover:bg-green-700 disabled:opacity-50"
           >
-            {loading ? 'Creating...' : 'Create'}
+            {loading ? 'Saving...' : editingId ? 'Update' : 'Create'}
           </button>
         </div>
       </div>
@@ -142,7 +151,16 @@ export default function Voucher() {
                     <td className="border p-3">{item.party}</td>
                     <td className="border p-3">₹{item.amt}</td>
                     <td className="border p-3">
-                      <button className="text-blue-600 hover:underline mr-2">View</button>
+                      <button
+                        onClick={() => {
+                          setEditingId(item.id);
+                          setParty(item.party);
+                          setAmt(String(item.amt));
+                        }}
+                        className="text-blue-600 hover:underline mr-2"
+                      >
+                        Edit
+                      </button>
                       <button 
                         onClick={() => deleteItem(item.id)}
                         className="text-red-600 hover:underline"

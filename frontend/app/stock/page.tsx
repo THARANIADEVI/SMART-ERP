@@ -18,6 +18,7 @@ export default function Stock() {
   const [name, setName] = useState('');
   const [qty, setQty] = useState('');
   const [price, setPrice] = useState('');
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -40,7 +41,14 @@ export default function Stock() {
     }
   };
 
-  const add = async () => {
+  const resetForm = () => {
+    setName('');
+    setQty('');
+    setPrice('');
+    setEditingId(null);
+  };
+
+  const save = async () => {
     if (!name.trim() || !qty.trim() || !price.trim()) {
       setError('Please fill all fields');
       return;
@@ -49,20 +57,25 @@ export default function Stock() {
     try {
       setLoading(true);
       setError('');
-      const newItem = await apiCall<StockItem>('/stock', {
-        method: 'POST',
+      const savedItem = await apiCall<StockItem>(editingId ? `/stock/${editingId}` : '/stock', {
+        method: editingId ? 'PUT' : 'POST',
         token,
         body: JSON.stringify({ name, qty: parseFloat(qty), price: parseFloat(price) }),
       });
-      setItems([...items, newItem]);
-      setName('');
-      setQty('');
-      setPrice('');
+      setItems(editingId ? items.map(item => item.id === editingId ? savedItem : item) : [...items, savedItem]);
+      resetForm();
     } catch (e) {
       setError(String(e));
     } finally {
       setLoading(false);
     }
+  };
+
+  const editItem = (item: StockItem) => {
+    setEditingId(item.id);
+    setName(item.name);
+    setQty(String(item.qty));
+    setPrice(String(item.price));
   };
 
   const deleteItem = async (id: number) => {
@@ -73,6 +86,9 @@ export default function Stock() {
         token,
       });
       setItems(items.filter(item => item.id !== id));
+      if (editingId === id) {
+        resetForm();
+      }
     } catch (e) {
       setError(String(e));
     } finally {
@@ -142,17 +158,17 @@ export default function Stock() {
             </div>
             <div className="flex items-end">
               <button 
-                onClick={add} 
+                onClick={save} 
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-smooth hover:shadow-lg hover:shadow-green-400/50 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    Adding...
+                    Saving...
                   </>
                 ) : (
-                  '✨ Add'
+                  editingId ? 'Update' : '✨ Add'
                 )}
               </button>
             </div>
@@ -190,7 +206,12 @@ export default function Stock() {
                         </td>
                         <td className="px-6 py-4 font-bold text-green-600">₹{item.price.toFixed(2)}</td>
                         <td className="px-6 py-4">
-                          <button className="text-blue-600 hover:text-blue-800 font-semibold mr-4 transition-smooth hover:scale-110">✏️ Edit</button>
+                          <button
+                            onClick={() => editItem(item)}
+                            className="text-blue-600 hover:text-blue-800 font-semibold mr-4 transition-smooth hover:scale-110"
+                          >
+                            ✏️ Edit
+                          </button>
                           <button 
                             onClick={() => deleteItem(item.id)}
                             className="text-red-600 hover:text-red-800 font-semibold transition-smooth hover:scale-110"

@@ -1,8 +1,10 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
+import { apiCall } from '../lib/api';
 
 const menuItems = [
   { title: 'Customer Ledger', desc: 'Manage customers', href: '/ledger/customer', emoji: '👥', color: 'from-blue-500 to-blue-600' },
@@ -15,7 +17,34 @@ const menuItems = [
 
 export default function Dashboard() {
   const router = useRouter();
-  const { clearToken } = useAuth();
+  const { token, clearToken } = useAuth();
+  const [stats, setStats] = useState({ items: 0, customers: 0, vouchers: 0 });
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    const loadStats = async () => {
+      try {
+        const [stock, customers, sales, purchases] = await Promise.all([
+          apiCall<unknown[]>('/stock', { token }),
+          apiCall<unknown[]>('/ledger/customer', { token }),
+          apiCall<unknown[]>('/voucher/sales', { token }),
+          apiCall<unknown[]>('/voucher/purchase', { token }),
+        ]);
+        setStats({
+          items: stock.length,
+          customers: customers.length,
+          vouchers: sales.length + purchases.length,
+        });
+      } catch {
+        setStats({ items: 0, customers: 0, vouchers: 0 });
+      }
+    };
+
+    loadStats();
+  }, [token]);
 
   const logout = () => {
     clearToken();
@@ -87,7 +116,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 font-semibold">Total Items</p>
-                <p className="text-3xl font-black text-blue-600 mt-2">0</p>
+                <p className="text-3xl font-black text-blue-600 mt-2">{stats.items}</p>
               </div>
               <div className="text-4xl opacity-50">📦</div>
             </div>
@@ -97,7 +126,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 font-semibold">Total Customers</p>
-                <p className="text-3xl font-black text-purple-600 mt-2">0</p>
+                <p className="text-3xl font-black text-purple-600 mt-2">{stats.customers}</p>
               </div>
               <div className="text-4xl opacity-50">👥</div>
             </div>
@@ -107,7 +136,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 font-semibold">Total Vouchers</p>
-                <p className="text-3xl font-black text-pink-600 mt-2">0</p>
+                <p className="text-3xl font-black text-pink-600 mt-2">{stats.vouchers}</p>
               </div>
               <div className="text-4xl opacity-50">📋</div>
             </div>
